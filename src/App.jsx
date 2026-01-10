@@ -189,9 +189,6 @@ const TiltCard = ({ children, className = "", ...props }) => {
   const x = useSpring(0, { stiffness: 150, damping: 30 });
   const y = useSpring(0, { stiffness: 150, damping: 30 });
 
-  const sheenX = useTransform(y, [-20, 20], ["150%", "-50%"]);
-  const sheenY = useTransform(x, [-20, 20], ["50%", "-150%"]);
-
   useEffect(() => {
     setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
@@ -201,8 +198,8 @@ const TiltCard = ({ children, className = "", ...props }) => {
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    x.set((e.clientY - centerY) / 15);
-    y.set((centerX - e.clientX) / 15);
+    x.set((e.clientY - centerY) / 40);
+    y.set((centerX - e.clientX) / 40);
   };
 
   const handleMouseLeave = () => {
@@ -222,7 +219,7 @@ const TiltCard = ({ children, className = "", ...props }) => {
         transformStyle: "preserve-3d",
         perspective: "1000px",
       }}
-      className={`relative rounded-2xl ${className}`}
+      className={`relative rounded-2xl overflow-hidden ${className}`}
     >
       {/* Main content with 3D transform */}
       <motion.div
@@ -235,18 +232,22 @@ const TiltCard = ({ children, className = "", ...props }) => {
         {children}
       </motion.div>
 
-      {/* Holographic Sheen */}
+      {/* Scan Line Effect */}
       <motion.div
+        className="absolute top-0 left-0 w-full h-1.5 opacity-0 group-hover:opacity-100"
         style={{
-          x: sheenX,
-          y: sheenY,
-          transform: "translateZ(80px) rotateZ(-45deg)",
+            background: "radial-gradient(ellipse at center, rgba(255,65,65,0.4) 0%, rgba(255,65,65,0) 80%)",
         }}
-        className="absolute inset-[-100%] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        aria-hidden="true"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      </motion.div>
+        initial={{ y: "-10%" }}
+        animate={{ y: "100%" }}
+        transition={{
+            duration: 2,
+            repeat: Infinity,
+            repeatType: 'reverse',
+            ease: 'easeInOut',
+            delay: Math.random() * 1.5,
+        }}
+      />
       
       {/* Background Grid */}
       <div 
@@ -527,6 +528,7 @@ export default function App() {
                   {skillMatrix.map((skill, i) => (
                     <TiltCard 
                       key={i}
+                      className="group"
                       animate={{
                         boxShadow: [
                           "0 0 0px rgba(255, 65, 65, 0)",
@@ -541,7 +543,7 @@ export default function App() {
                         ease: "easeInOut"
                       }}
                     >
-                      <div className="p-8 md:p-10 h-full group">
+                      <div className="p-8 md:p-10 h-full">
                         <skill.icon size={28} className="text-red-600 mb-8 group-hover:scale-110 transition-transform" />
                         <h4 className="text-[10px] md:text-xs font-dot uppercase tracking-[0.4em] mb-8 text-white/70 group-hover:text-white">{skill.label}</h4>
                         <ul className="space-y-4">
