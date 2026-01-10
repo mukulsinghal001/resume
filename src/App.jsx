@@ -56,7 +56,7 @@ const EvolvingDataCore = ({ scrollProgress }) => {
     const highlightGeo = new THREE.BufferGeometry();
     highlightGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([0,0,1000]), 3));
     const highlightMat = new THREE.PointsMaterial({
-        color: 0xffffff,
+        color: 0xff4141,
         size: 0.25,
         blending: THREE.AdditiveBlending,
         transparent: true,
@@ -79,6 +79,9 @@ const EvolvingDataCore = ({ scrollProgress }) => {
     camera.position.z = isMobile ? 12 : 10;
     
     let mouseX = 0, mouseY = 0;
+    const pulses = [];
+    const createPulse = (position) => {};
+    
     const handleMouseMove = (e) => {
       mouseX = (e.clientX - window.innerWidth / 2) / 100;
       mouseY = (e.clientY - window.innerHeight / 2) / 100;
