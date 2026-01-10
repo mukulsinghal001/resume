@@ -182,7 +182,7 @@ const EvolvingDataCore = ({ scrollProgress }) => {
 };
 
 // --- HOLOGRAPHIC PANEL ---
-const TiltCard = ({ children, className = "" }) => {
+const TiltCard = ({ children, className = "", ...props }) => {
   const cardRef = useRef(null);
   const [isTouch, setIsTouch] = useState(false);
   
@@ -212,6 +212,7 @@ const TiltCard = ({ children, className = "" }) => {
 
   return (
     <motion.div
+      {...props}
       ref={cardRef}
       onMouseMove={handleMouse}
       onMouseLeave={handleMouseLeave}
@@ -524,13 +525,28 @@ export default function App() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {skillMatrix.map((skill, i) => (
-                    <TiltCard key={i}>
+                    <TiltCard 
+                      key={i}
+                      animate={{
+                        boxShadow: [
+                          "0 0 0px rgba(255, 65, 65, 0)",
+                          "0 0 25px rgba(255, 65, 65, 0.3)",
+                          "0 0 0px rgba(255, 65, 65, 0)",
+                        ]
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        delay: Math.random() * 4,
+                        ease: "easeInOut"
+                      }}
+                    >
                       <div className="p-8 md:p-10 h-full group">
                         <skill.icon size={28} className="text-red-600 mb-8 group-hover:scale-110 transition-transform" />
-                        <h4 className="text-[10px] md:text-xs font-dot uppercase tracking-[0.4em] mb-8 text-white/40 group-hover:text-white">{skill.label}</h4>
+                        <h4 className="text-[10px] md:text-xs font-dot uppercase tracking-[0.4em] mb-8 text-white/70 group-hover:text-white">{skill.label}</h4>
                         <ul className="space-y-4">
                           {skill.items.map((item, j) => (
-                            <li key={j} className="text-[11px] md:text-[13px] font-mono text-white/20 flex items-center space-x-3 group-hover:text-white transition-colors">
+                            <li key={j} className="text-[11px] md:text-[13px] font-mono text-white/60 flex items-center space-x-3 group-hover:text-white transition-colors">
                               <span className="w-1 h-1 bg-red-600 rounded-full" />
                               <span>{item}</span>
                             </li>
