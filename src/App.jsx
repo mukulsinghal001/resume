@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
+import { Analytics } from '@vercel/analytics/react';
 import {
   ArrowUpRight, Mail, Linkedin, Cpu, Database,
   Layers, BarChart, Zap, ChevronRight, Menu, X,
@@ -658,6 +659,7 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      <Analytics />
     </div>
   );
 }
